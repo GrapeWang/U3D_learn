@@ -1,3 +1,4 @@
 # U3D_learn
 
-1. ´ò×©¿é
+1. æ‰“ç –å—
+http://www.sikiedu.com/course/77
