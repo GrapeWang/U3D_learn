@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 5127257333719244505}
   - component: {fileID: 7324196259638801523}
   - component: {fileID: 1960492557246490878}
-  m_Layer: 0
+  - component: {fileID: 5232636190067821719}
+  m_Layer: 10
   m_Name: MapCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ae994abc3a8baae4c95e6aab660e83b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -91,3 +92,26 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5232636190067821719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673721689873439213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d81e03415204604d964f9f5cb48c4dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TurretOn: {fileID: 0}
+  isUpgraded: 0
+  BuildEffect: {fileID: 427009631231919049, guid: 6ac09d0cb718fec43a7ca57b05c710c0,
+    type: 3}
+  turretData:
+    TurretPrefab: {fileID: 0}
+    Cost: 0
+    UpgradeTurretPrefab: {fileID: 0}
+    UpgradeCost: 0
+    Value: 0
+    UpgradeValue: 0
