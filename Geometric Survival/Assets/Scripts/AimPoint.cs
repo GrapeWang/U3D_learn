@@ -17,6 +17,10 @@ public class AimPoint : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PauseManager.isPause)
+        {
+            return;
+        }
         transform.Rotate(new Vector3(0,0,1),rotateSpeed * Time.deltaTime);
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         target.z = transform.position.z;

@@ -19,17 +19,23 @@ public class EnemyMove : MonoBehaviour
     public AudioClip explosionClip;
 
     public GameObject Bonus;
+
+    private int EnemyDestroyScore = 10;
     // Start is called before the first frame update
     void Start()
     {
         changeRate = Random.Range(changeRatemin, changeRatemax);
         MoveSpeed = MoveSpeed * Time.deltaTime;
-        targetPosition = new Vector3(Random.Range(-7f,7f),Random.Range(-5f,5f),0);
+        targetPosition = new Vector3(Random.Range(-50f,50f),Random.Range(-50f,50f),0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (PauseManager.isPause)
+        {
+            return;
+        }
         Move();
     }
 
@@ -43,9 +49,7 @@ public class EnemyMove : MonoBehaviour
         }
         else
         {
-            counter = 0;
-            targetPosition = new Vector3(Random.Range(-7f, 7f), Random.Range(-5f, 5f), 0);
-            changeRate = Random.Range(changeRatemin, changeRatemax);
+            changeMove();
         }
     }
 
@@ -54,11 +58,35 @@ public class EnemyMove : MonoBehaviour
         hp = hp - damage;
         if (hp<=0)
         {
+            EnemyGenerator.Score += EnemyDestroyScore;
+
             AudioManager.instance.playEnemyFX(explosionClip);
-            Destroy(this.gameObject);
+            
             effect = GameObject.Instantiate(ExplosionEffect, transform.position, transform.rotation);
             Destroy(effect,1.5f);
             GameObject.Instantiate(Bonus, transform.position, Quaternion.identity);
+
+            Destroy(this.gameObject);
+        }
+    }
+
+    void changeMove()
+    {
+        counter = 0;
+        targetPosition = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), 0);
+        changeRate = Random.Range(changeRatemin, changeRatemax);
+    }
+
+    void backMove()
+    {
+        targetPosition = transform.position + transform.position - targetPosition;
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.collider.tag == "Enemy_circle" || col.collider.tag == "Enemy_square" || col.collider.tag == "Enemy_triangle" || col.collider.tag == "Border")
+        {
+            Invoke("backMove",0.1f);
         }
     }
 }

@@ -1,0 +1,6 @@
+[Geometric Survival] - 2020/02/06 23:39:40
+23:39:40.67-[Log]日志系统已启动
+23:39:43.24-[Log]isPause: False
+23:39:43.72-[Log]isPause: True
+23:39:44.10-[Log]isPause: False
+23:39:44.55-[Log]isPause: True

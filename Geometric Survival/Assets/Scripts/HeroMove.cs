@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeroMove : MonoBehaviour
 {
-    public float speed=1;
-    public float force = 5;
+//    private float speed = 5;
+    private float force = 15;
     public GameObject AimPoint;
     public Transform FirePoint;
     public GameObject[] FireMode = new GameObject[3];
@@ -25,7 +26,7 @@ public class HeroMove : MonoBehaviour
     public Transform EffectPoint;
     public GameObject FireEffect;
 
-    private int hp = 200;
+ //   public int hp = 200;
     private int EnemyColDamage = 10;
 
     public AudioClip explosionClip;
@@ -34,24 +35,39 @@ public class HeroMove : MonoBehaviour
     public GameObject ColEffect;
     private GameObject coleffect;
 
-    private int[] Bulnum = new int[3]{10,10,10};
-    private int BulnumMax = 20;
+    private int[] Bulnum = new int[3]{30,30,30};
+    private int BulnumMax = 30;
     private int BonusBulnum = 10;
     public AudioClip BulletEmptyClip;
 
+    public Slider lifebar;
 
- //   public LineRenderer fireline;
- //   private Vector3 headTarget;
- // Start is called before the first frame update
+    public Slider[] BnumBar = new Slider[3];
+
+    public Text[] BnumText = new Text[3];
+
+    //   public LineRenderer fireline;
+    //   private Vector3 headTarget;
+    // Start is called before the first frame update
+    void Awake()
+    {
+        DataManager.heroHp = 200;
+    }
+
     void Start()
     {
         rd = GetComponent<Rigidbody2D>();
         audiosource = GetComponent<AudioSource>();
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (PauseManager.isPause)
+        {
+            return;
+        }
         LookTarget();
         ForceMove();
         SwitchMode();
@@ -63,7 +79,7 @@ public class HeroMove : MonoBehaviour
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
         rd.AddForce(new Vector3(h, v, 0) * force);
-        //rd.MovePosition(transform.position+new Vector3(h,v,0) * speed * Time.deltaTime);
+       // rd.MovePosition(transform.position+new Vector3(h,v,0) * speed *Time.deltaTime);
     }
 
     void LookTarget()
@@ -109,6 +125,8 @@ public class HeroMove : MonoBehaviour
                 Destroy(effect, 0.5f);
                 Bulnum[fireindex]--;
                 Bulnum[fireindex] = Mathf.Clamp(Bulnum[fireindex], 0, BulnumMax);
+                BnumBar[fireindex].value = Bulnum[fireindex];
+                BnumText[fireindex].text = Bulnum[fireindex].ToString();
             }
             else
             {
@@ -125,11 +143,12 @@ public class HeroMove : MonoBehaviour
     {
         if (col.collider.tag=="Enemy_circle"|| col.collider.tag == "Enemy_square"|| col.collider.tag == "Enemy_triangle")
         {
-            hp = hp - EnemyColDamage;
+            DataManager.heroHp = DataManager.heroHp - EnemyColDamage;
+            lifebar.value = DataManager.heroHp;
             AudioManager.instance.playEnemyFX(ColClip);
             coleffect=GameObject.Instantiate(ColEffect, col.GetContact(0).point, Quaternion.identity);
             Destroy(coleffect,1f);
-            if (hp<=0)
+            if (DataManager.heroHp<=0)
             {
                 Die();
             }
@@ -139,26 +158,37 @@ public class HeroMove : MonoBehaviour
         {
             Bulnum[0] += BonusBulnum;
             Bulnum[0] = Mathf.Clamp(Bulnum[0], 0, BulnumMax);
+            BnumBar[0].value = Bulnum[0];
+            BnumText[0].text = Bulnum[0].ToString();
         }
 
         if (col.collider.tag == "Bonus_square")
         {
             Bulnum[1] += BonusBulnum;
             Bulnum[1] = Mathf.Clamp(Bulnum[1], 0, BulnumMax);
+            BnumBar[1].value = Bulnum[1];
+            BnumText[1].text = Bulnum[1].ToString();
         }
 
         if (col.collider.tag == "Bonus_triangle")
         {
             Bulnum[2] += BonusBulnum;
             Bulnum[2] = Mathf.Clamp(Bulnum[2], 0, BulnumMax);
+            BnumBar[2].value = Bulnum[2];
+            BnumText[2].text = Bulnum[2].ToString();
         }
     }
 
     void Die()
     {
         AudioManager.instance.playEnemyFX(explosionClip);
-        Destroy(this.gameObject);
+        
         effect = GameObject.Instantiate(ExplosionEffect, transform.position, transform.rotation);
         Destroy(effect, 1.5f);
+
+ //       EnemyGenerator.instance.GameOver();
+
+        Destroy(this.gameObject);
     }
+
 }

@@ -29,6 +29,10 @@ public class Bonus : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PauseManager.isPause)
+        {
+            return;
+        }
         Move();
     }
 
